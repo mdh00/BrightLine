@@ -29,3 +29,35 @@ export const createService = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getServiceById = async (req, res, next) => {
+  try{
+    const serviceId = req.params.id;
+
+    const service = await Service.findById(serviceId)
+
+    if (service === null) {
+      throw new NotFoundError("Service not found");
+    }
+    console.log("Service:", service);
+    return res.status(200).json(service);
+  } catch (error) {
+    next(error);
+  }
+}
+
+export const deleteService = async (req, res, next) => {
+  try{
+    const serviceId = req.params.id;
+    const deletedService = await Service.findByIdAndDelete(serviceId);
+    if (deletedService === null) {
+      throw new NotFoundError("Service not found");
+    }
+    return res.status(200).json({
+      message: "Service deleted successfully",
+      service: deletedService,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
