@@ -2,6 +2,7 @@ import Booking from "../persistence/Entities/bookings.js";
 import { BookingDTO } from "./dto/bookings.js";
 import ValidationError from "../domain/errors/validation-error.js";
 import NotFoundError from "../domain/errors/not-found-error.js";
+import { clerkClient } from "@clerk/clerk-sdk-node";
 
 export const getAllBookings = async (req, res, next) => {
   try{
@@ -17,11 +18,18 @@ export const getAllBookings = async (req, res, next) => {
 
 export const createBooking = async (req, res, next) => {
   try{
+    console.log(req.auth);
+    const { userId } = req.auth;
+
+    const user = await clerkClient.users.getUser(userId);
+    console.log(user);
+
     const booking = BookingDTO.safeParse(req.body);
     if(!booking.success){
       throw new ValidationError(booking.error);
     }
-    await Booking.create({...booking.data, userId: "123"});
+    await Booking.create({...booking.data, userId: userId});
+    
     return res.status(201).send("Booking created successfully");
   } catch (error) {
     console.log(error);
@@ -45,6 +53,22 @@ export const getBookingById = async (req, res, next) => {
   }
 }
 
+export const getBookingByUserId = async (req, res, next) => {
+  try{
+    const userId = req.params.userId;
+    console.log("Route hit with userId:", req.params.userId);
+    const booking = await Booking.find({userId: userId})
+
+    if (booking === null) {
+      throw new NotFoundError("Booking not found");
+    }
+    console.log("Booking:", booking);
+    return res.status(200).json(booking);
+  }
+  catch (error) {
+    next(error);
+  }
+}
 
 export const updateBooking = async (req, res, next) => {
   try{

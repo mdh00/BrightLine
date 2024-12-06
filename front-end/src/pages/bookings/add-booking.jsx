@@ -3,53 +3,119 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { DateTimePicker24hForm } from "@/components/ui/date-time-picker";
 import { BiChevronDown } from "react-icons/bi";
 import classNames from "classnames";
 import { Button } from "@/components/ui/button";
-
-function handleSubmit(event) {
-  event.preventDefault();
-  const form = event.target;
-  const formData = new FormData(form);
-  const data = Object.fromEntries(formData);
-  console.log(data);
-}
-
-const handleDateChange = (selectedDate) => {
-  setDate(selectedDate);
-  const formattedDate = format(selectedDate, "yyyy-MM-dd");
-  fetchPredictions(formattedDate);
-  calculateWeekRange(selectedDate);
-};
+import { getServices } from "@/lib/api/services";
+import { createBooking } from "@/lib/api/bookings";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 function AddBooking() {
   const [date, setDate] = useState(new Date());
-  const [services, setServices] = useState([
-    "Deep Cleaning",
-    "Carpet Cleaning",
-    "Window Cleaning",
-    "Upholstery Cleaning"
-  ]);
+  const [services, setServices] = useState([]);
   const [selectedService, setSelectedService] = useState(null);
   const [isSelecterOpened, setIsSelecterOpened] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [isError, setIsError] = useState(false);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    getServices()
+      .then((data) => {
+        setIsError(false);
+        setServices(data);
+      })
+      .catch((error) => {
+        setIsError(true);
+        setError(error.message);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, []);
 
   const handleServiceClick = (service) => {
-    setSelectedService(service);
+    setSelectedService(service.name);
+    setFormData({ ...formData, service: service._id }); // Store the _id
     setIsSelecterOpened(false);
+  };
+
+  const [formData, setFormData] = useState({
+    name: "",
+    address: "",
+    dateTime: "",
+    service: "",
+  });
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    if (!formData.name || !formData.address || !formData.dateTime || !formData.service) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Missing Fields',
+        text: 'Please fill all fields before submitting.',
+      });
+      return;
+    }
+
+    try {
+      createBooking({
+        name: formData.name,
+        address: formData.address,
+        dateTime: formData.dateTime,
+        service: formData.service,
+      });
+      Swal.fire({
+        icon: 'success',
+        title: 'Booking Submitted!',
+        text: 'Your job booking has been submitted successfully.',
+        timer: 3000, 
+        showConfirmButton: false,
+      }).then(() => {
+        navigate("/");
+      });
+
+      setFormData({
+        name: "",
+        address: "",
+        dateTime: "",
+        service: "",
+      });
+
+    } catch (error) {
+      console.error(error);
+    }
+    console.log(formData);
   };
 
   return (
     <div className="flex justify-center">
       <form className="w-2/3 py-8 flex flex-col gap-y-8" onSubmit={handleSubmit}>
-      <h2>Add Booking</h2>
+        <h2>Add Booking</h2>
         <Label>Name</Label>
-        <Input></Input>
+        <Input
+          value={formData.name}
+          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+        />
+
         <Label>Address</Label>
-        <Input></Input>
+        <Input
+          value={formData.address}
+          onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+        />
+
         <Label>Enter your date & time (24h)</Label>
-        <DateTimePicker24hForm />
+        <DateTimePicker24hForm
+          selectedDate={formData.dateTime}
+          onDateTimeChange={(date) => setFormData({ ...formData, dateTime: date })}
+        />
+
         <Label>Service Type</Label>
 
         <div className="w-auto font-normal h-80">
@@ -57,7 +123,7 @@ function AddBooking() {
             className="bg-white w-full p-2 flex items-center justify-between border rounded cursor-pointer"
             onClick={() => setIsSelecterOpened(!isSelecterOpened)}
           >
-            <span>{selectedService ?? 'Select Service'}</span>
+            <span>{selectedService ?? "Select Service"}</span>
             <BiChevronDown size={20} className={classNames({ "rotate-180": isSelecterOpened })} />
           </div>
 
@@ -69,14 +135,14 @@ function AddBooking() {
           >
             {services.map((service) => (
               <li
-                key={service}
+                key={service._id}
                 className={classNames({
                   "p-2 text-sm hover:bg-gray-200 hover:text-black ": true,
-                  "bg-gray-100 text-black ": service === selectedService,
+                  "bg-gray-100 text-black ": service.name === selectedService,
                 })}
                 onClick={() => handleServiceClick(service)}
               >
-                {service}
+                {service.name}
               </li>
             ))}
           </ul>

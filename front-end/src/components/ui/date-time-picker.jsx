@@ -32,18 +32,18 @@ const FormSchema = z.object({
   }),
 });
 
-export function DateTimePicker24hForm() {
+export function DateTimePicker24hForm({ selectedDate, onDateTimeChange }) {
   const form = useForm({
     resolver: zodResolver(FormSchema),
+    defaultValues: {
+      time: selectedDate || new Date(),
+    },
   });
-
-  function onSubmit(data) {
-    toast.success(`Selected date and time: ${format(data.time, "PPPP HH:mm")}`);
-  }
 
   function handleDateSelect(date) {
     if (date) {
       form.setValue("time", date);
+      onDateTimeChange(date); // Notify parent about the change
     }
   }
 
@@ -59,11 +59,12 @@ export function DateTimePicker24hForm() {
     }
 
     form.setValue("time", newDate);
+    onDateTimeChange(newDate); // Notify parent about the change
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+      <form onSubmit={form.handleSubmit(() => {})} className="space-y-5">
         <FormField
           control={form.control}
           name="time"
