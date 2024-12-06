@@ -1,9 +1,9 @@
-import Navigation from "@/components/shared/Navigation";
+import { SignIn } from "@clerk/clerk-react";
 
 function SignInPage() {
   return (
-    <main>
-      <h1>Sign In</h1>
+    <main className="flex flex-col items-center justify-center min-h-screen">
+      <SignIn />
     </main>
   );
 }

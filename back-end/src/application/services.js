@@ -17,7 +17,7 @@ export const createService = async (req, res, next) => {
   try{
     const service = ServiceDTO.safeParse(req.body);
     if(!service.success){
-      console.error("Validation failed:", service.error);
+      throw new ValidationError(job.error);
     }
     const createService = await Service.create(service.data);
     return res.status(201).json({
