@@ -6,16 +6,16 @@
   :root {
     --background: 0, 0%, 100%;
     --foreground: 0 0% 0%;
-    --card: 69 100% 50%;
+    --card: 65.79,70.37%,68.24%;
     --card-foreground: 222.2 84% 4.9%;
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
-    --primary: 169, 69%, 44%;
+    --primary: 37, 100%, 50%;
     --primary-foreground: 222.2 84% 4.9%;
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
     --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted-foreground: 0, 0%, 36%;
     --accent: 217.2 32.6% 17.5%;
     --accent-foreground: 210 40% 98%;
     --destructive: 0 62.8% 30.6%;
@@ -24,7 +24,7 @@
     --input: 217.2 32.6% 17.5%;
     --ring: 224.3 76.3% 48%;
     --radius: 0.5rem;
-    --test: hsl(0, 0%, 87%);
+    --button: 37, 100%, 50%;
   }
 }
 
@@ -49,7 +49,7 @@
   }
 
   .text-underlay-1 {
-    background: linear-gradient(98deg, #ffbf00 -9.47%, #00a49d 45.47%);
+    background: linear-gradient(98deg, #ff9d00 -9.47%, #00a49d);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;

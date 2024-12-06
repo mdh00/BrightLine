@@ -17,7 +17,7 @@ bookingsRouter
     .delete(deleteBooking); 
 
 bookingsRouter
-    .route("user/:userId")
-    .get(getBookingByUserId)
+    .route("/user")
+    .get(ClerkExpressRequireAuth({}), getBookingByUserId)
 
 export default bookingsRouter;

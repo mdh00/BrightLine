@@ -8,6 +8,7 @@ import SignInPage from "./pages/sign-in.page";
 import SignUpPage from "./pages/sign-up.page";
 import RootLayout from "./layouts/root.layout"; 
 import AddBooking from "./pages/bookings/add-booking";
+import AdminBookings from "./pages/admin/admin-bookings-page";
 import { ClerkProvider } from '@clerk/clerk-react'
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
         path: "/add-booking",
         element: <AddBooking />,
       },
+      {
+        path: "/admin/bookings",
+        element: <AdminBookings />,
+      }
     ],
   },
 ]);

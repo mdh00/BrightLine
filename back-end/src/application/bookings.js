@@ -53,22 +53,38 @@ export const getBookingById = async (req, res, next) => {
   }
 }
 
-export const getBookingByUserId = async (req, res, next) => {
-  try{
-    const userId = req.params.userId;
-    console.log("Route hit with userId:", req.params.userId);
-    const booking = await Booking.find({userId: userId})
+// export const getBookingByUserId = async (req, res, next) => {
+//   try{
+//     const { userId } = req.auth;
+//     const user = await clerkClient.users.getUser(userId);
+//     console.log("user",user);
 
-    if (booking === null) {
-      throw new NotFoundError("Booking not found");
-    }
-    console.log("Booking:", booking);
-    return res.status(200).json(booking);
+//     console.log("request",req);
+//     const booking = await Booking.find({userId: userId})
+
+//     if (booking === null) {
+//       throw new NotFoundError("Booking not found");
+//     }
+//     console.log("Booking:", booking);
+//     return res.status(200).json(booking);
+//   }
+//   catch (error) {
+//     next(error);
+//   }
+// }
+
+export const getBookingByUserId = async (req, res) => {
+  try {
+      const { userId } = req.auth; // Clerk user ID from the authenticated request
+      const bookings = await Booking.find({ userId }); // Assuming `Booking` is your MongoDB model
+      res.status(200).json(bookings);
+  } catch (error) {
+      res.status(500).json({ error: "Failed to fetch bookings" });
   }
-  catch (error) {
-    next(error);
-  }
-}
+};
+
+
+
 
 export const updateBooking = async (req, res, next) => {
   try{

@@ -9,8 +9,8 @@ function Navigation() {
   return (
     <nav className="flex py-12 justify-between items-center border-x-0 border border-blue-gray-300 mb-5">
     <div>
-      <Link to={"/"} className="text-4xl font-medium text-underlay-1">
-        HirelyAI
+      <Link to={"/"} className="text-4xl font-extrabold text-underlay-1">
+        BrightLine
       </Link>
     </div>
     <div className="flex justify-center gap-x-8 items-center">
@@ -19,7 +19,7 @@ function Navigation() {
         <SignedIn>
         {isAdmin && (
               <Button asChild>
-                <Link to="/admin/jobs">Admin Dashboard</Link>
+                <Link to="/admin/bookings">Admin Dashboard</Link>
               </Button>
             )}
           <UserButton />
