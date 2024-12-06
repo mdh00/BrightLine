@@ -1,31 +1,33 @@
+import React, { useState, useEffect } from "react";
+import { getBookingsForUser, fetchUserBookings } from "@/lib/api/bookings";
 import BookingCard from "@/components/shared/booking-card";
-import { useEffect, useState } from "react";
-import { getAllBookings, deleteBooking } from "@/lib/api/bookings";
-import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import AddService from "./add-service";
 import Swal from "sweetalert2";
-
-
-function AdminBookings() {
-  const [bookings, setBookings] = useState([])
-  const [isLoading, setIsLoading] = useState(true);
+const UserBookings = () => {
+  const [bookings, setBookings] = useState([]);
   const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
 
+
   useEffect(() => {
-    getAllBookings().then((data) => {
-      setIsError(false);
-      setBookings(data);
-      console.log(data);
-    }).catch((error) => {
-      setIsError(true);
-      setError(error);
-    })
-      .finally(() => setIsLoading(false));
+    const loadBookings = async () => {
+      try {
+        const data = await fetchUserBookings();
+        setBookings(data);
+        console.log("Bookings:", data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadBookings();
   }, []);
 
-
+  const handleEdit = (id) => {
+    console.log("Edit booking with ID:", id);
+  };
 
   const handleDelete = async (id) => {
     const result = await Swal.fire({
@@ -37,12 +39,13 @@ function AdminBookings() {
       cancelButtonText: "Cancel",
       reverseButtons: true,
     });
-
+  
     if (result.isConfirmed) {
       try {
         await deleteBooking(id);
+  
         setBookings((prevBookings) => prevBookings.filter((booking) => booking._id !== id));
-
+  
         Swal.fire({
           icon: "success",
           title: "Deleted!",
@@ -64,15 +67,6 @@ function AdminBookings() {
   };
 
 
-  const handleEdit = async (booking) => {
-    try {
-      await updateBooking(booking._id, booking);
-      alert("Booking updated successfully!");
-    } catch (error) {
-      console.error("Failed to update booking:", error);
-    }
-  };
-
   if (isLoading) {
     return (
       <section className="py-8">
@@ -91,14 +85,13 @@ function AdminBookings() {
   if (isError) {
     return <div>Error: {error.message}</div>;
   }
+
   return (
-    <><h2 className="text-center mb-7">Admin Dashboard</h2>
-
-      <AddService />
-
+    <div className="py-7">
+      <h2 className="py-6">Your Bookings</h2>
       <div className="grid grid-cols-1 gap-5 md:grid-cols-4 w-full mx-auto">
-        {bookings.map((booking) => {
-          return (
+        {bookings.length > 0 ? (
+          bookings.map((booking) => (
             <BookingCard
               key={booking._id}
               booking={booking}
@@ -106,11 +99,16 @@ function AdminBookings() {
               onEdit={handleEdit}
               onDelete={handleDelete}
             />
-          );
-        })}
-      </div></>
-  )
-}
+          ))
+        ) : (
+          <div className="text-center col-span-full">
+            <p className="text-gray-500">You don't have any bookings yet.</p>
+          </div>
+        )}
+      </div>
+      {error && <p className="text-red-500 mt-4">Error: {error}</p>}
+    </div>
+  );
+};
 
-
-export default AdminBookings;
+export default UserBookings;

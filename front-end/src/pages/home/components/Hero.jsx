@@ -7,7 +7,7 @@ function Hero() {
         <h1 className="text-black">Your All-in-One Cleaning Service Solution.</h1>
         <div className="flex justify-center mt-10">
         <Button asChild size="lg" className="text-lg">
-          <Link to={"/add-booking"}>Book Now</Link>
+          <Link to={"/add-booking" }>Book Now</Link>
           </Button>
         </div>
       </div>

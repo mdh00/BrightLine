@@ -1,13 +1,14 @@
-import Navigation from "@/components/shared/Navigation";
 import Hero from "./components/Hero";
-import BookingsSection from "./components/Bookings-section";
-import UserBookings from "./components/Bookings-section";
+import UserBookings from "./components/UserBookings";
+import { useAuth } from "@clerk/clerk-react";
 
 function HomePage() {
+  const {isSignedIn} = useAuth();
   return (
     <main>      
       <div>
         <Hero />
+        {isSignedIn && <UserBookings />}
       </div>
     </main>
   );

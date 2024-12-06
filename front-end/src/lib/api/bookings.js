@@ -41,12 +41,13 @@ export const getBookingsForUser = async (userId) => {
 
 export const fetchUserBookings = async () => {
     try {
-      const token = await window.Clerk?.session?.getToken(); // Get the Clerk token
-  
+      const token = await window.Clerk?.session?.getToken();
+      console.log("Token:", token);
+
       const response = await fetch("http://localhost:8000/api/bookings/user", {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${token}`, // Send the Clerk token
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       });

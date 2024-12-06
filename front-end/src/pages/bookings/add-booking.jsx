@@ -11,9 +11,11 @@ import { Button } from "@/components/ui/button";
 import { getServices } from "@/lib/api/services";
 import { createBooking } from "@/lib/api/bookings";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
+import { useAuth } from "@clerk/clerk-react";
 
 function AddBooking() {
+  const { isLoaded, isSignedIn, user } = useAuth();
   const [date, setDate] = useState(new Date());
   const [services, setServices] = useState([]);
   const [selectedService, setSelectedService] = useState(null);
@@ -93,6 +95,10 @@ function AddBooking() {
     }
     console.log(formData);
   };
+
+  if (!isSignedIn) {
+    return <Navigate to="/sign-in" />;
+  }
 
   return (
     <div className="flex justify-center">
