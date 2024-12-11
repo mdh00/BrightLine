@@ -2,7 +2,7 @@
 export const createBooking = async (data) => {
     const token = await window.Clerk?.session?.getToken();
 
-    const res = await fetch("http://localhost:8000/api/bookings", {
+    const res = await fetch("https://brightline.onrender.com/api/bookings", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -22,7 +22,7 @@ export const getBookingsForUser = async (userId) => {
     }
   
 
-    const res = await fetch("http://localhost:8000/api/bookings/users/${userId}", {
+    const res = await fetch("https://brightline.onrender.com/api/bookings/users/${userId}", {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -44,7 +44,7 @@ export const fetchUserBookings = async () => {
       const token = await window.Clerk?.session?.getToken();
       console.log("Token:", token);
 
-      const response = await fetch("http://localhost:8000/api/bookings/user", {
+      const response = await fetch("https://brightline.onrender.com/api/bookings/user", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -67,7 +67,7 @@ export const fetchUserBookings = async () => {
 export const getBookingById = async (id) => {
     const token = await window.Clerk?.session?.getToken();
 
-    const res = await fetch(`http://localhost:8000/api/bookings/${id}`, {
+    const res = await fetch(`https://brightline.onrender.com/api/bookings/${id}`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -81,7 +81,7 @@ export const getBookingById = async (id) => {
 export const updateBooking = async (id, data) => {
     const token = await window.Clerk?.session?.getToken();
 
-    const res = await fetch(`http://localhost:8000/api/bookings/${id}`, {
+    const res = await fetch(`https://brightline.onrender.com/api/bookings/${id}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
@@ -94,7 +94,7 @@ export const updateBooking = async (id, data) => {
 export const deleteBooking = async (id) => {
     const token = await window.Clerk?.session?.getToken();
 
-    const res = await fetch(`http://localhost:8000/api/bookings/${id}`, {
+    const res = await fetch(`https://brightline.onrender.com/api/bookings/${id}`, {
         method: "DELETE",
         headers: {
             "Content-Type": "application/json",
@@ -108,7 +108,7 @@ export const deleteBooking = async (id) => {
 export const getAllBookings = async () => {
     const token = await window.Clerk?.session?.getToken();
 
-    const res = await fetch("http://localhost:8000/api/bookings", {
+    const res = await fetch("https://brightline.onrender.com/api/bookings", {
         method: "GET",
         headers: {
             "Content-Type": "application/json",

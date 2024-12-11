@@ -1,6 +1,6 @@
 export const getServices = async () => {
     
-const res = await fetch("http://localhost:8000/api/services", {
+const res = await fetch("https://brightline.onrender.com/api/services", {
     method: "GET",
     headers: {
         "Content-Type": "application/json",
@@ -13,7 +13,7 @@ const res = await fetch("http://localhost:8000/api/services", {
 export const createService = async (data) => {
     const token = await window.Clerk?.session?.getToken();
 
-    const res = await fetch("http://localhost:8000/api/services", {
+    const res = await fetch("https://brightline.onrender.com/api/services", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
