@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { getBookingsForUser, fetchUserBookings } from "@/lib/api/bookings";
+import { getBookingsForUser, fetchUserBookings, deleteBooking } from "@/lib/api/bookings";
 import BookingCard from "@/components/shared/booking-card";
 import Swal from "sweetalert2";
+import { useAuth } from "@clerk/clerk-react";
 const UserBookings = () => {
   const [bookings, setBookings] = useState([]);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
+  const { user } = useAuth();
+  const isAdmin = user?.publicMetadata?.role === "admin";
 
 
   useEffect(() => {
@@ -21,6 +24,8 @@ const UserBookings = () => {
         setIsLoading(false);
       }
     };
+
+    
 
     loadBookings();
   }, []);
@@ -95,7 +100,7 @@ const UserBookings = () => {
             <BookingCard
               key={booking._id}
               booking={booking}
-              isAdmin={true}
+              isAdmin={isAdmin}
               onEdit={handleEdit}
               onDelete={handleDelete}
             />

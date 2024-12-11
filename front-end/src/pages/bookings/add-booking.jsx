@@ -74,7 +74,7 @@ function AddBooking() {
       Swal.fire({
         icon: 'success',
         title: 'Booking Submitted!',
-        text: 'Your job booking has been submitted successfully.',
+        text: 'Your booking has been submitted successfully.',
         timer: 3000, 
         showConfirmButton: false,
       }).then(() => {
