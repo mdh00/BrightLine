@@ -11,11 +11,6 @@ import { Link } from "react-router-dom";
 
 function BookingCard(props) {
   return (
-    <Link
-      to={
-        props.isAdmin ? `/admin/bookings/${props.booking._id}` : `/job/${props.booking._id}`
-      }
-    >
     <Card className="transform transition duration-300 hover:scale-105">
       <CardHeader>
         <CardTitle>{props.booking.service.name}</CardTitle>
@@ -46,7 +41,6 @@ function BookingCard(props) {
         </div>
       </CardFooter>
     </Card>
-    </Link>
   );
 }
 
